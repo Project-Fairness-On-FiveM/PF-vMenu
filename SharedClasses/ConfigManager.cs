@@ -33,6 +33,7 @@ namespace vMenuShared
             vmenu_disable_entity_outlines_tool,
             vmenu_disable_player_stats_setup,
             pfvmenu_moshnotify_setting,
+            pfvmenu_force_locationblips_setting,
 
             // Kick & ban settings
             vmenu_default_ban_message_information,

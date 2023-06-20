@@ -28,7 +28,7 @@ namespace vMenuClient
         public bool JoinQuitNotifications { get; private set; } = false;
         public bool LockCameraX { get; private set; } = false;
         public bool LockCameraY { get; private set; } = false;
-        public bool ShowLocationBlips { get; private set; } = UserDefaults.MiscLocationBlips;
+        public bool ShowLocationBlips { get; private set; }
         public bool ShowPlayerBlips { get; private set; } = true;
         public bool MiscShowOverheadNames { get; private set; } = true;
         public bool ShowVehicleModelDimensions { get; private set; } = false;
@@ -783,6 +783,17 @@ namespace vMenuClient
                     UserDefaults.SaveSettings();
                 }
             };
+
+            // Checks if location blips are forced to be enabled or set to UserDefaults based on the convar.
+            if (vMenuShared.ConfigManager.GetSettingsBool(vMenuShared.ConfigManager.Setting.pfvmenu_force_locationblips_setting))
+            {
+                ShowLocationBlips = true;
+            }
+            else
+            {
+                ShowLocationBlips = UserDefaults.MiscLocationBlips;
+            };
+
         }
 
 
