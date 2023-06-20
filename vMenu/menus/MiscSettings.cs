@@ -845,7 +845,7 @@ namespace vMenuClient
                 }
                 catch (JsonReaderException ex)
                 {
-                    Debug.Write($"\n\n[vMenu] An error occurred while loading the locations.json file. Please contact the server owner to resolve this.\nWhen contacting the owner, provide the following error details:\n{ex.Message}.\n\n\n");
+                    Debug.Write($"\n\n[vMenu] An error occurred while loading the blips.json file. Please contact the server owner to resolve this.\nWhen contacting the owner, provide the following error details:\n{ex.Message}.\n\n\n");
                 }
             }
             else

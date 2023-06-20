@@ -148,10 +148,10 @@ namespace vMenuShared
         {
             Locations data = new Locations();
 
-            string jsonFile = LoadResourceFile(GetCurrentResourceName(), "config/locations.json");
+            string locationjsonFile = LoadResourceFile(GetCurrentResourceName(), "config/locations.json");
             try
             {
-                if (string.IsNullOrEmpty(jsonFile))
+                if (string.IsNullOrEmpty(locationjsonFile))
                 {
 #if CLIENT
                     vMenuClient.Notify.Error("The locations.json file is empty or does not exist, please tell the server owner to fix this.");
@@ -162,7 +162,7 @@ namespace vMenuShared
                 }
                 else
                 {
-                    data = JsonConvert.DeserializeObject<Locations>(jsonFile);
+                    data = JsonConvert.DeserializeObject<Locations>(locationjsonFile);
                 }
             }
             catch (Exception e)
@@ -184,10 +184,10 @@ namespace vMenuShared
         {
             Blips data = new Blips();
 
-            string jsonFile = LoadResourceFile(GetCurrentResourceName(), "config/blips.json");
+            string blipsjsonFile = LoadResourceFile(GetCurrentResourceName(), "config/blips.json");
             try
             {
-                if (string.IsNullOrEmpty(jsonFile))
+                if (string.IsNullOrEmpty(blipsjsonFile))
                 {
 #if CLIENT
                     vMenuClient.Notify.Error("The blips.json file is empty or does not exist, please tell the server owner to fix this.");
@@ -198,7 +198,7 @@ namespace vMenuShared
                 }
                 else
                 {
-                    data = JsonConvert.DeserializeObject<Blips>(jsonFile);
+                    data = JsonConvert.DeserializeObject<Blips>(blipsjsonFile);
                 }
             }
             catch (Exception e)
@@ -227,7 +227,7 @@ namespace vMenuShared
         /// <returns></returns>
         public static List<LocationBlip> GetLocationBlipsData()
         {
-            return GetBlips().blips;
+            return GetBlips().blipes;
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace vMenuShared
         }
         public struct Blips
         {
-            public List<LocationBlip> blips;
+            public List<LocationBlip> blipes;
         }
 
         /// <summary>
