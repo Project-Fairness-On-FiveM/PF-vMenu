@@ -434,6 +434,7 @@ namespace vMenuClient
                             case "a_c_killerwhale":
                             case "a_c_sharkhammer":
                             case "a_c_sharktiger":
+                            case "a_c_stingray":
                                 Notify.Error("This animal can only be spawned when you are in water, otherwise you will die immediately.");
                                 return;
                             default: break;
