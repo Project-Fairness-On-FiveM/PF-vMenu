@@ -139,7 +139,7 @@ namespace vMenuShared
             return GetResourceMetadata("vMenu", "client_debug_mode", 0).ToLower() == "true";
         }
 
-        #region Get saved locations from the locations.json
+        #region Get saved locations from the locations.json and saved blips from the blips.json
         /// <summary>
         /// Gets the locations.json data.
         /// </summary>
@@ -168,7 +168,43 @@ namespace vMenuShared
             catch (Exception e)
             {
 #if CLIENT
-                vMenuClient.Notify.Error("An error occurred while processing the locations.json file. Teleport Locations and Location Blips will be unavailable. Please correct any errors in the locations.json file.");
+                vMenuClient.Notify.Error("An error occurred while processing the locations.json file. Teleport Locations will be unavailable. Please correct any errors in the locations.json file.");
+#endif
+                Debug.WriteLine($"[vMenu] json exception details: {e.Message}\nStackTrace:\n{e.StackTrace}");
+            }
+
+            return data;
+        }
+
+        /// <summary>
+        /// Gets the blips.json data.
+        /// </summary>
+        /// <returns></returns>
+        public static Blips GetBlips()
+        {
+            Blips data = new Blips();
+
+            string jsonFile = LoadResourceFile(GetCurrentResourceName(), "config/blips.json");
+            try
+            {
+                if (string.IsNullOrEmpty(jsonFile))
+                {
+#if CLIENT
+                    vMenuClient.Notify.Error("The blips.json file is empty or does not exist, please tell the server owner to fix this.");
+#endif
+#if SERVER
+                    vMenuServer.DebugLog.Log("The blips.json file is empty or does not exist, please fix this.", vMenuServer.DebugLog.LogLevel.error);
+#endif
+                }
+                else
+                {
+                    data = JsonConvert.DeserializeObject<Blips>(jsonFile);
+                }
+            }
+            catch (Exception e)
+            {
+#if CLIENT
+                vMenuClient.Notify.Error("An error occurred while processing the blips.json file. Location Blips will be unavailable. Please correct any errors in the blips.json file.");
 #endif
                 Debug.WriteLine($"[vMenu] json exception details: {e.Message}\nStackTrace:\n{e.StackTrace}");
             }
@@ -186,12 +222,12 @@ namespace vMenuShared
         }
 
         /// <summary>
-        /// Gets just the blips data from the locations.json.
+        /// Gets just the blips data from the blips.json.
         /// </summary>
         /// <returns></returns>
         public static List<LocationBlip> GetLocationBlipsData()
         {
-            return GetLocations().blips;
+            return GetBlips().blips;
         }
 
         /// <summary>
@@ -200,6 +236,9 @@ namespace vMenuShared
         public struct Locations
         {
             public List<TeleportLocation> teleports;
+        }
+        public struct Blips
+        {
             public List<LocationBlip> blips;
         }
 
