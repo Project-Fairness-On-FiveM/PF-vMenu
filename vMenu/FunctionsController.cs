@@ -3185,11 +3185,11 @@ namespace vMenuClient
         public async Task TeleportOptions()
         {
             await Delay(100);
-            if (MainMenu.MiscSettingsMenu.KbTpToWaypoint)
+            if (MainMenu.TeleportOptionsMenu.KbTpToWaypoint)
             {
                 if (IsAllowed(Permission.TPTeleportToWp))
                 {
-                    if (Game.IsControlJustReleased(0, (Control)MainMenu.MiscSettingsMenu.KbTpToWaypointKey)
+                    if (Game.IsControlJustReleased(0, (Control)MainMenu.TeleportOptionsMenu.KbTpToWaypointKey)
                         && Fading.IsFadedIn
                         && !IsPlayerSwitchInProgress()
                         && Game.CurrentInputMode == InputMode.MouseAndKeyboard)

@@ -25,6 +25,8 @@ namespace vMenuClient
         public bool ReplaceVehicle { get; private set; } = UserDefaults.VehicleSpawnerReplacePrevious;
         public static List<bool> allowedCategories;
 
+        private static readonly LanguageManager Lm = new LanguageManager();
+
         private void CreateMenu()
         {
 
@@ -48,7 +50,7 @@ namespace vMenuClient
 
             #region addon cars menu
             // Vehicle Addons List
-            Menu addonCarsMenu = new Menu("Addon Vehicles", "Choose how you'd like to find your car");
+            Menu addonCarsMenu = Lm.GetMenu(new Menu("Addon Vehicles", "Choose how you'd like to find your car"));
             MenuItem addonCarsBtn = new MenuItem("~b~Addon Vehicles", "A list of addon vehicles available on this server.") { Label = "→→→" };
 
             menu.AddMenuItem(addonCarsBtn);

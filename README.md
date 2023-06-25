@@ -1,20 +1,24 @@
 # PF-vMenu
 The vMenu for Project Fairness and other affiliated servers. All actions are subject to change.
 
+# Description
+The original vMenu was lacking on options and new content. I made this version as a way for people to still get the latest updates, while of course, adding new things so it feels more like the vMenu on other servers (such as RSM, Impulse99, etc) while also improving upon the original.
+
 # What's New
 - Chameleon Color by Wildbrick142 - [Download Chameleon Colors here](https://cdn.discordapp.com/attachments/1099903046701559828/1102708906234478712/pzn_chameleoncolor.7z), [Source](https://www.gta5-mods.com/misc/chameleon-paint-add-on)
 - Content Updated up to v2802
 - Mosh_Notify embedded Support for vMenu's NoClip - [Download Mosh_Notify here](https://forum.cfx.re/t/release-free-mosh-notify-fivem-custom-notifications-with-loadbar/2614951)
 - Los Santos Tuners goodies such as Vehicle Stance and Drift Tires (it's useless since we have vStancer and Handling Editor, but hey, it works)
 - Moved Teleport Options to the front (Now, you no longer have to go to Misc Settings to teleport to your favorite place!)
-- (Untested) PMA-Voice Support
+- PMA-Voice Support
+- Custom language support (22/06/2023)
 - (WIP) Local Time & Weather Options
 - (WIP) Car Brands on Addon Vehicles menu
-
-# Description
-The original vMenu was lacking on options and new content. I made this version as a way for people to still get the latest updates, while of course, adding new things so it feels more like the vMenu on other servers (such as RSM, Impulse99, etc).
-
+--------
 # Credits
+- TristenCommunity
+- DeckardCain000
+- QuadrupleTurbo
 - Lincoln HUX
 - Starman0620
 - 1Mosheba
@@ -26,18 +30,16 @@ The original vMenu was lacking on options and new content. I made this version a
 - AvaNOX
 - TayMcKenzieNZ
 - Vespura
+--------
+# Discord
+Please join [our Discord server](https://discord.gg/D7cVc8TzPN) if you want support in regards to this menu.
 
 # vMenu
 vMenu is server sided menu for FiveM servers, including full\* permission support.
 
-
 \*(Some features do not have permissions support as they are either harmless or it'd just be silly to deny them. However, they will be disabled if you deny access to the submenu that they are a part of (eg: unlimited stamina in Player Options will be disabled if you deny `vMenu.PlayerOptions.Menu`.))
 
 The intention of this vMenu is to create the ultimate vMenu from Vespura's resources, while also achieving the same features seen on other servers such as Rockstar Mischief and Impulse99, which have a modified vMenu, while adding and integrating new features inside of said vMenu.
-
-# Discord
-Please join [our Discord server](https://discord.gg/D7cVc8TzPN) if you want support in regards to this menu.
-
 --------
 
 # Download & Installation & Permissions
