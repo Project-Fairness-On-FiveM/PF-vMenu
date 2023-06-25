@@ -796,16 +796,6 @@ namespace vMenuClient
                     UserDefaults.SaveSettings();
                 }
             };
-          
-            // Checks if location blips are forced to be enabled or set to UserDefaults based on the convar.
-            if (vMenuShared.ConfigManager.GetSettingsBool(vMenuShared.ConfigManager.Setting.pfvmenu_force_locationblips_setting))
-            {
-                ShowLocationBlips = true;
-            }
-            else
-            {
-                ShowLocationBlips = UserDefaults.MiscLocationBlips;
-            }
 
             menu.OnListItemSelect += (menu, listItem, selectedIndex, itemIndex) =>
             {
@@ -817,6 +807,16 @@ namespace vMenuClient
                         LanguageManager.TranslateMenus();
                     }
                 }
+            };
+
+            // Checks if location blips are forced to be enabled or set to UserDefaults based on the convar.
+            if (vMenuShared.ConfigManager.GetSettingsBool(vMenuShared.ConfigManager.Setting.pfvmenu_force_locationblips_setting))
+            {
+                ShowLocationBlips = true;
+            }
+            else
+            {
+                ShowLocationBlips = UserDefaults.MiscLocationBlips;
             };
   
         }
