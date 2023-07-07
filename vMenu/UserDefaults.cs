@@ -697,7 +697,7 @@ namespace vMenuClient
 
             if (MainMenu.TeleportOptionsMenu != null)
             {
-                KbTpToWaypoint = MainMenu.MiscSettingsMenu.KbTpToWaypoint;
+                KbTpToWaypoint = MainMenu.TeleportOptionsMenu.KbTpToWaypoint;
                 prefs.Add("kbTpToWaypoint", KbTpToWaypoint);
             }
 

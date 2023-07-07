@@ -769,6 +769,19 @@ namespace vMenuClient
 
             };
 
+            // Language Settings
+            menu.OnListItemSelect += (menu, listItem, selectedIndex, itemIndex) =>
+            {
+                if (listItem == changeLanguage)
+                {
+                    if (!listItem.ListItems[selectedIndex].Equals("N/A"))
+                    {
+                        CurrentLanguage = listItem.ListItems[selectedIndex];
+                        LanguageManager.TranslateMenus();
+                    }
+                }
+            };
+
             // Handle button presses.
             menu.OnItemSelect += (sender, item, index) =>
             {
@@ -794,17 +807,6 @@ namespace vMenuClient
                 else if (item == saveSettings)
                 {
                     UserDefaults.SaveSettings();
-                }
-            };
-            menu.OnListItemSelect += (menu, listItem, selectedIndex, itemIndex) =>
-            {
-                if (listItem == changeLanguage)
-                {
-                    if (!listItem.ListItems[selectedIndex].Equals("N/A"))
-                    {
-                        CurrentLanguage = listItem.ListItems[selectedIndex];
-                        LanguageManager.TranslateMenus();
-                    }
                 }
             };
         }
