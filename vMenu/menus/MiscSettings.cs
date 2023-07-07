@@ -769,6 +769,19 @@ namespace vMenuClient
 
             };
 
+            // Language Settings
+            menu.OnListItemSelect += (menu, listItem, selectedIndex, itemIndex) =>
+            {
+                if (listItem == changeLanguage)
+                {
+                    if (!listItem.ListItems[selectedIndex].Equals("N/A"))
+                    {
+                        CurrentLanguage = listItem.ListItems[selectedIndex];
+                        LanguageManager.TranslateMenus();
+                    }
+                }
+            };
+
             // Handle button presses.
             menu.OnItemSelect += (sender, item, index) =>
             {
@@ -797,18 +810,6 @@ namespace vMenuClient
                 }
             };
 
-            menu.OnListItemSelect += (menu, listItem, selectedIndex, itemIndex) =>
-            {
-                if (listItem == changeLanguage)
-                {
-                    if (!listItem.ListItems[selectedIndex].Equals("N/A"))
-                    {
-                        CurrentLanguage = listItem.ListItems[selectedIndex];
-                        LanguageManager.TranslateMenus();
-                    }
-                }
-            };
-
             // Checks if location blips are forced to be enabled or set to UserDefaults based on the convar.
             if (vMenuShared.ConfigManager.GetSettingsBool(vMenuShared.ConfigManager.Setting.pfvmenu_force_locationblips_setting))
             {
@@ -818,7 +819,7 @@ namespace vMenuClient
             {
                 ShowLocationBlips = UserDefaults.MiscLocationBlips;
             };
-  
+          
         }
 
 

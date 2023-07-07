@@ -15,6 +15,10 @@ The original vMenu was lacking on options and new content. I made this version a
 - (WIP) Local Time & Weather Options
 - (WIP) Car Brands on Addon Vehicles menu
 --------
+# Translations
+If you want to help out provide translations to vMenu, you can [click here](https://github.com/ProjectFairnessLabs/GroupTranslationDB) and do a pull request!
+
+--------
 # Credits
 - TristenCommunity
 - DeckardCain000
@@ -34,14 +38,7 @@ The original vMenu was lacking on options and new content. I made this version a
 # Discord
 Please join [our Discord server](https://discord.gg/D7cVc8TzPN) if you want support in regards to this menu.
 
-# vMenu
-vMenu is server sided menu for FiveM servers, including full\* permission support.
-
-\*(Some features do not have permissions support as they are either harmless or it'd just be silly to deny them. However, they will be disabled if you deny access to the submenu that they are a part of (eg: unlimited stamina in Player Options will be disabled if you deny `vMenu.PlayerOptions.Menu`.))
-
-The intention of this vMenu is to create the ultimate vMenu from Vespura's resources, while also achieving the same features seen on other servers such as Rockstar Mischief and Impulse99, which have a modified vMenu, while adding and integrating new features inside of said vMenu.
 --------
-
 # Download & Installation & Permissions
 
 ## Requirements
@@ -52,8 +49,6 @@ The intention of this vMenu is to create the ultimate vMenu from Vespura's resou
 
 ## Download
 Download this vMenu [here](https://github.com/ProjectFairnessLabs/PF-vMenu/releases)
-
-Download Vespura's vMenu [here](https://github.com/TomGrobbe/vMenu/releases) for the original version, if you have issues.
 
 --------
 
@@ -77,6 +72,16 @@ If you like Vespura's work, please consider supporting him on [**Patreon**](http
 ## Pull Requests
 We are glad at accepting Pull Requests to add more features overtime to our vMenu, meaning we can add more features that can be similar to other vMenu clients.
 
+--------
+
+--------
+
+# vMenu
+vMenu is server sided menu for FiveM servers, including full\* permission support.
+
+\*(Some features do not have permissions support as they are either harmless or it'd just be silly to deny them. However, they will be disabled if you deny access to the submenu that they are a part of (eg: unlimited stamina in Player Options will be disabled if you deny `vMenu.PlayerOptions.Menu`.))
+
+The intention of this vMenu is to create the ultimate vMenu from Vespura's resources, while also achieving the same features seen on other servers such as Rockstar Mischief and Impulse99, which have a modified vMenu, while adding and integrating new features inside of said vMenu.
 --------
 
 ## Permissions 
