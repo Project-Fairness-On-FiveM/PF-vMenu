@@ -88,12 +88,13 @@ namespace vMenuClient
             MenuCheckboxItem highbeamsOnHonk = new MenuCheckboxItem("Flash Highbeams On Honk", "Turn on your highbeams on your vehicle when honking your horn. Does not work during the day when you have your lights turned off.", FlashHighbeamsOnHonk);
             MenuCheckboxItem showHealth = new MenuCheckboxItem("Show Vehicle Health", "Shows the vehicle health on the screen.", VehicleShowHealth);
             MenuCheckboxItem infiniteFuel = new MenuCheckboxItem("Infinite Fuel", "Enables or disables infinite fuel for this vehicle, only works if FRFuel is installed.", VehicleInfiniteFuel);
-
+            
             // Create buttons.
             MenuItem fixVehicle = new MenuItem("Repair Vehicle", "Repair any visual and physical damage present on your vehicle.");
             MenuItem cleanVehicle = new MenuItem("Wash Vehicle", "Clean your vehicle.");
             MenuItem toggleEngine = new MenuItem("Toggle Engine On/Off", "Turn your engine on/off.");
             MenuItem setLicensePlateText = new MenuItem("Set License Plate Text", "Enter a custom license plate for your vehicle.");
+            MenuItem reduceDriftSuspension = new MenuItem("Reduce Drift Suspension", "Reduce the suspension of the vehicle to make it even lower to drift. Use the option again to revert back to your original suspension. ~r~~h~This modification disables the original strAdvancedFlag of the vehicle!~s~~h~");
             MenuItem modMenuBtn = new MenuItem("Mod Menu", "Tune and customize your vehicle here.")
             {
                 Label = "→→→"
@@ -387,6 +388,9 @@ namespace vMenuClient
             {
                 menu.AddMenuItem(infiniteFuel);
             }
+            if (IsAllowed(Permission.VOReduceDriftSuspension)) {
+                menu.AddMenuItem(reduceDriftSuspension);
+            }
             // always allowed
             menu.AddMenuItem(showHealth); // SHOW VEHICLE HEALTH
 
@@ -530,6 +534,10 @@ namespace vMenuClient
                                 // Set the vehicle invisible or invincivble.
                                 vehicle.IsVisible = !vehicle.IsVisible;
                             }
+                        }
+                        else if (item == reduceDriftSuspension)
+                        {
+                            SetVehicleDriftSuspension();
                         }
                     }
 

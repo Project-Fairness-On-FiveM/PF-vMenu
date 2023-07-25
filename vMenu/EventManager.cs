@@ -46,6 +46,7 @@ namespace vMenuClient
             EventHandlers.Add("vMenu:updatePedDecors", new Action(UpdatePedDecors));
             EventHandlers.Add("playerSpawned", new Action(SetAppearanceOnFirstSpawn));
             EventHandlers.Add("vMenu:GetOutOfCar", new Action<int, int>(GetOutOfCar));
+            EventHandlers.Add("vMenu:SetDriftSuspension", new Action<int, bool>(SetDriftSuspension));
             EventHandlers.Add("vMenu:PrivateMessage", new Action<string, string>(PrivateMessage));
             EventHandlers.Add("vMenu:UpdateTeleportLocations", new Action<string>(UpdateTeleportLocations));
 
@@ -436,6 +437,22 @@ namespace vMenuClient
                     }
                 }
             }
+        }
+
+        private void SetDriftSuspension(int vehNetId, bool status)
+        {
+            int veh = NetToVeh(vehNetId);
+
+            // We apply thes flags
+            SetVehicleHandlingField( veh, "CCarHandlingData", "fBackEndPopUpCarImpulseMult", (int)0.100000 );
+            SetVehicleHandlingField( veh, "CCarHandlingData", "fBackEndPopUpBuildingImpulseMult", (int)0.030000 );
+            SetVehicleHandlingField( veh, "CCarHandlingData", "fBackEndPopUpMaxDeltaSpeed", (int)0.600000 );
+
+            SetVehicleHandlingField( veh, "CCarHandlingData", "strAdvancedFlags", 0x8000 + 0x4000000 );
+
+            // We enable or disable the suspension
+            SetReduceDriftVehicleSuspension( veh, status );
+
         }
 
         /// <summary>

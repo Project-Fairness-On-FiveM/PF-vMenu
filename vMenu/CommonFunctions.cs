@@ -1597,6 +1597,34 @@ namespace vMenuClient
         }
         #endregion
 
+        #region Set Reduce Drift Suspension
+        public static void SetVehicleDriftSuspension()
+        {
+            // Only continue if the player is in a vehicle.
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                // Get the vehicle.
+                Vehicle veh = GetVehicle();
+
+                // If the vehicle as the requirement to do this.
+                var StrAdvancedFlags = GetVehicleHandlingInt( veh.Handle, "CCarHandlingData", "strAdvancedFlags" );
+                if (StrAdvancedFlags == 0) 
+                {
+                    Notify.Error("This vehicle doesn't have the requirement to do this.", true, false);
+                    return;
+                }
+
+                // We send to all client
+                BaseScript.TriggerServerEvent("vMenu:SetDriftSuspension", veh.NetworkId);
+            }
+            // The player is not inside a vehicle.
+            else
+            {
+                Notify.Error(CommonErrors.NoVehicle);
+            }
+        }
+        #endregion
+
         #region Get Saved Vehicles Dictionary
         /// <summary>
         /// Returns a collection of all saved vehicles, with their save name and saved vehicle info struct.

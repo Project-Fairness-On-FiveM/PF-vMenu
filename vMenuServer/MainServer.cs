@@ -1019,5 +1019,22 @@ namespace vMenuServer
         }
 
         #endregion
+
+        #region Set drift suspension
+
+        [EventHandler("vMenu:SetDriftSuspension")]
+        private void SetDriftSuspension(int vehNetId)
+        {
+            Entity vehEntity = Entity.FromNetworkId(vehNetId);
+            if (vehEntity == null) return;
+
+            StateBag vehState = vehEntity.State;
+            bool? reduceDriftSuspension = vehState["Set:ReduceDriftSuspension"] ?? false;
+
+            vehEntity.State["Set:ReduceDriftSuspension"] = reduceDriftSuspension.Value ? false : true;
+            TriggerClientEvent( "vMenu:SetDriftSuspension", vehNetId, vehEntity.State["Set:ReduceDriftSuspension"] );
+        }
+
+        #endregion
     }
 }
