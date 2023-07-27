@@ -13,6 +13,10 @@
   ],
 
   // Rest go here
+  "vehicleblacklist": [
+    "blacklisted1",
+    "blacklisted2"
+  ],
   "vehicles": [
     "addoncarname1",
     "addoncarname2"

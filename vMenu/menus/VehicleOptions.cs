@@ -464,7 +464,7 @@ namespace vMenuClient
 
             #region Handle button presses
             // Manage button presses.
-            menu.OnItemSelect += (sender, item, index) =>
+            menu.OnItemSelect += async (sender, item, index) =>
             {
                 if (item == deleteBtn) // reset the index so that "no" / "cancel" will always be selected by default.
                 {
@@ -493,6 +493,9 @@ namespace vMenuClient
                         else if (item == flipVehicle)
                         {
                             SetVehicleOnGroundProperly(vehicle.Handle);
+                            FreezeEntityPosition(vehicle.Handle, true);
+                            await BaseScript.Delay(0);
+                            FreezeEntityPosition(vehicle.Handle, false);
                         }
                         // Toggle alarm.
                         else if (item == vehicleAlarm)

@@ -903,13 +903,13 @@ namespace vMenuClient
                             if ((Game.IsControlPressed(0, Control.Sprint) && Game.CurrentInputMode == InputMode.MouseAndKeyboard) ||
                                 (Game.IsControlPressed(0, Control.Jump) && Game.CurrentInputMode == InputMode.GamePad))
                             {
-                                SetVehicleReduceGrip(veh.Handle, true);
+                                SetDriftTyresEnabled(veh.Handle, true);
                             }
                             else
                             if ((Game.IsControlJustReleased(0, Control.Sprint) && Game.CurrentInputMode == InputMode.MouseAndKeyboard) ||
                                 (Game.IsControlJustReleased(0, Control.Jump) && Game.CurrentInputMode == InputMode.GamePad))
                             {
-                                SetVehicleReduceGrip(veh.Handle, false);
+                                SetDriftTyresEnabled(veh.Handle, false);
                             }
                         }
                     }
