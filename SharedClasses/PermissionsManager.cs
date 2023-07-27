@@ -103,6 +103,7 @@ namespace vMenuShared
             VOReduceDriftSuspension,
             VOFlares,
             VOPlaneBombs,
+            VOVehiclesBlacklist,
             #endregion
 
             // Vehicle Spawner
