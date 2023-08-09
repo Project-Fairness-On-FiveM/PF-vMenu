@@ -18,10 +18,11 @@ namespace vMenuClient
         // Variables
         private Menu menu;
         public static Dictionary<string, uint> AddonVehicles;
-
         public bool SpawnInVehicle { get; private set; } = UserDefaults.VehicleSpawnerSpawnInside;
         public bool ReplaceVehicle { get; private set; } = UserDefaults.VehicleSpawnerReplacePrevious;
         public static List<bool> allowedCategories;
+
+        private static readonly LanguageManager Lm = new LanguageManager();
 
         private void CreateMenu()
         {
@@ -106,6 +107,9 @@ namespace vMenuClient
                         // Sort vehicle brands alphabetically
                         var sortedVehicleBrands = vehiclesByMakeName.Keys.Where(brand => brand != "Unknown").OrderBy(brand => brand).ToList();
 
+                        // Initialize a list to store models to move to the "unavailableCars" category
+                        List<string> modelsToMoveToUnavailableCars = new List<string>();
+
                         // Add the "Unknown" category at the end.
                         if (vehiclesByMakeName.ContainsKey("Unknown"))
                         {
@@ -117,7 +121,7 @@ namespace vMenuClient
                             List<string> models = vehiclesByMakeName[makeName];
 
                             string brandNameText = GetLabelText(makeName);
-                            if (brandNameText == null || brandNameText.ToUpper() == "NULL")  // Checks if theres a label text for the make name and if not it just puts it as the full makeName value.
+                            if (brandNameText == null || brandNameText.ToUpper() == "NULL")  // Checks if there's a label text for the make name and if not, it just puts it as the full makeName value.
                             {
                                 brandNameText = makeName;
                             }
@@ -133,6 +137,14 @@ namespace vMenuClient
                             {
                                 uint modelHash = (uint)GetHashKey(model); // Explicitly cast to uint
 
+                                // Check if the model is available in the game's CD image
+                                if (!IsModelInCdimage(modelHash))
+                                {
+                                    // Add the model to the list to be moved to the "unavailableCars" category
+                                    modelsToMoveToUnavailableCars.Add(model);
+                                    continue; // Skip adding the model to the brandMenu and move to the next model.
+                                }
+
                                 string localizedNameBrandCar = GetLabelText(GetDisplayNameFromVehicleModel(modelHash));
 
                                 string modelname = localizedNameBrandCar != "NULL" ? localizedNameBrandCar : GetDisplayNameFromVehicleModel(modelHash);
@@ -144,17 +156,7 @@ namespace vMenuClient
                                     ItemData = model // store the model name in the button data.
                                 };
 
-                                if (IsModelInCdimage(modelHash))
-                                {
-                                    brandMenu.AddMenuItem(modelBtn);
-                                }
-                                else
-                                {
-                                    modelBtn.Enabled = false;
-                                    modelBtn.Description = "This vehicle is not available. Please ask the server owner to check if the vehicle is being streamed correctly.";
-                                    modelBtn.LeftIcon = MenuItem.Icon.LOCK;
-                                    unavailableCars.AddMenuItem(modelBtn);
-                                }
+                                brandMenu.AddMenuItem(modelBtn);
                             }
 
                             if (brandMenu.Size > 0)
@@ -167,6 +169,24 @@ namespace vMenuClient
                                     SpawnVehicle(item.ItemData.ToString(), SpawnInVehicle, ReplaceVehicle);
                                 };
                             }
+                        }
+
+                        // Add the models to the "unavailableCars" category
+                        foreach (string model in modelsToMoveToUnavailableCars)
+                        {
+                            uint modelHash = (uint)GetHashKey(model);
+                            string localizedNameBrandCar = GetLabelText(GetDisplayNameFromVehicleModel(modelHash));
+                            string modelname = localizedNameBrandCar != "NULL" ? localizedNameBrandCar : model;
+
+                            MenuItem modelBtn = new MenuItem(modelname, $"This vehicle is not available. Please ask the server owner to check if the vehicle is being streamed correctly.")
+                            {
+                                Label = $"({model})",
+                                ItemData = model,
+                                Enabled = false,
+                                LeftIcon = MenuItem.Icon.LOCK
+                            };
+
+                            unavailableCars.AddMenuItem(modelBtn);
                         }
 
                         // Sort by Class vehicles
