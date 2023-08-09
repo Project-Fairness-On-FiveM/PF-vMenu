@@ -17,19 +17,14 @@ namespace vMenuClient
     {
         // Variables
         private Menu menu;
-        public static Dictionary<string, uint> Brand;
         public static Dictionary<string, uint> AddonVehicles;
-        public static Dictionary<string, uint> BrandVehicles;
 
         public bool SpawnInVehicle { get; private set; } = UserDefaults.VehicleSpawnerSpawnInside;
         public bool ReplaceVehicle { get; private set; } = UserDefaults.VehicleSpawnerReplacePrevious;
         public static List<bool> allowedCategories;
 
-        private static readonly LanguageManager Lm = new LanguageManager();
-
         private void CreateMenu()
         {
-
             #region initial setup.
             // Create the menu.
             menu = new Menu(Game.Player.Name, "Vehicle Spawner");
@@ -50,15 +45,16 @@ namespace vMenuClient
 
             #region addon cars menu
             // Vehicle Addons List
-            Menu addonCarsMenu = Lm.GetMenu(new Menu("Addon Vehicles", "Choose how you'd like to find your car"));
+            Menu addonCarsMenu = new Menu("Addon Vehicles", "Addon Vehicles");
             MenuItem addonCarsBtn = new MenuItem("~b~Addon Vehicles", "A list of addon vehicles available on this server.") { Label = "→→→" };
 
             menu.AddMenuItem(addonCarsBtn);
 
             string jsonData = LoadResourceFile(GetCurrentResourceName(), "config/addons.json") ?? "{}";
-            var brandsjson = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(jsonData);
+            var vehiclesjson = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(jsonData);
 
             //var modelist = dict.OrderByDescending(pair => pair.Value).Take(5).ToDictionary(pair => pair.Key, pair => pair.Value);
+
 
             if (IsAllowed(Permission.VSAddon))
             {
@@ -70,56 +66,97 @@ namespace vMenuClient
                         MenuController.AddSubmenu(menu, addonCarsMenu);
                         Menu unavailableCars = new Menu("Addon Spawner", "Unavailable Vehicles");
                         MenuItem unavailableCarsBtn = new MenuItem("Unavailable Vehicles", "These addon vehicles are not currently being streamed (correctly) and are not able to be spawned.") { Label = "→→→" };
-                        MenuController.AddSubmenu(addonCarsMenu, unavailableCars);
 
-                        Menu ManuMenu = new Menu("Manufacturer List", "Choose a manufacturer");
-                        MenuItem ManuBtn = new MenuItem("~y~Manufacturer Vehicles", $"Find the car you want by the list of manufacturers.") { Label = "→→→" };
+                        Menu ManuMenu = new Menu("Manufacturer List", "Choose your manufacturer");
+                        MenuItem ManuBtn = new MenuItem("Sort by Manufacturer", $"Find your car by manufacturers instead of scrolling through classes") { Label = "→→→" };
                         addonCarsMenu.AddMenuItem(ManuBtn);
                         MenuController.AddSubmenu(addonCarsMenu, ManuMenu);
                         MenuController.BindMenuItem(addonCarsMenu, ManuMenu, ManuBtn);
 
-                        foreach (KeyValuePair<string, uint> brands in Brand)
+                        Menu CaterMenu = new Menu("Classes List", "Choose your class");
+                        MenuItem CaterBtn = new MenuItem("Sort by Classes", $"Find your car by classes.") { Label = "→→→" };
+                        addonCarsMenu.AddMenuItem(CaterBtn);
+                        MenuController.AddSubmenu(addonCarsMenu, CaterMenu);
+                        MenuController.BindMenuItem(addonCarsMenu, CaterMenu, CaterBtn);
+
+                        // Sort by Manufacturer vehicles
+
+                        Dictionary<string, List<string>> vehiclesByMakeName = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase); // Create a case-insensitive dictionary to store vehicle models based on make names
+
+                        foreach (string model in vehiclesjson["vehicles"])
                         {
-                            Menu brandMenu = new Menu(brands.Key, "Select a car you want to spawn");
-                            MenuItem brandBtn = new MenuItem(brands.Key, $"Open this to spawn an vehicle from {brands.Key}.") { Label = "→→→" };
-                            ManuMenu.AddMenuItem(brandBtn);
-                            //MenuController.AddSubmenu(categoryMenuManu, brandMenu);
-                            //MenuController.BindMenuItem(categoryMenuManu, brandMenu, brandBtn);
+                            // Get the vehicle make name using the "GetMakeNameFromVehicleModel()" function.
+                            string makeName = GetMakeNameFromVehicleModel((uint)GetHashKey(model));
 
-                            BrandVehicles = new Dictionary<string, uint>();
-
-                            if (brandsjson.ContainsKey(brands.Key))
+                            // Check if the makeName is null or empty, and if so, put the model in the "Unknown" category.
+                            if (string.IsNullOrEmpty(makeName))
                             {
-                                foreach (string element in brandsjson[brands.Key])
+                                makeName = "Unknown";
+                            }
+
+                            // Add the vehicle model to the list corresponding to its make name.
+                            if (!vehiclesByMakeName.ContainsKey(makeName))
+                            {
+                                vehiclesByMakeName[makeName] = new List<string>();
+                            }
+
+                            vehiclesByMakeName[makeName].Add(model);
+                        }
+
+                        // Sort vehicle brands alphabetically
+                        var sortedVehicleBrands = vehiclesByMakeName.Keys.Where(brand => brand != "Unknown").OrderBy(brand => brand).ToList();
+
+                        // Add the "Unknown" category at the end.
+                        if (vehiclesByMakeName.ContainsKey("Unknown"))
+                        {
+                            sortedVehicleBrands.Add("Unknown");
+                        }
+
+                        foreach (string makeName in sortedVehicleBrands)
+                        {
+                            List<string> models = vehiclesByMakeName[makeName];
+
+                            string brandNameText = GetLabelText(makeName);
+                            if (brandNameText == null || brandNameText.ToUpper() == "NULL")  // Checks if theres a label text for the make name and if not it just puts it as the full makeName value.
+                            {
+                                brandNameText = makeName;
+                            }
+
+                            Menu brandMenu = new Menu(makeName, brandNameText);
+                            MenuItem brandBtn = new MenuItem(brandNameText, $"Spawn a vehicle from {brandNameText}") { Label = "→→→" };
+                            ManuMenu.AddMenuItem(brandBtn);
+
+                            // Sort vehicle models alphabetically, ignoring the first 4 characters if they are numbers
+                            var sortedModels = models.OrderBy(model => RemoveNumbersFromStart(GetLabelText(model))).ToList();
+
+                            foreach (string model in sortedModels)
+                            {
+                                uint modelHash = (uint)GetHashKey(model); // Explicitly cast to uint
+
+                                string localizedNameBrandCar = GetLabelText(GetDisplayNameFromVehicleModel(modelHash));
+
+                                string modelname = localizedNameBrandCar != "NULL" ? localizedNameBrandCar : GetDisplayNameFromVehicleModel(modelHash);
+                                modelname = modelname != "CARNOTFOUND" ? modelname : model;
+
+                                MenuItem modelBtn = new MenuItem(modelname, $"Click to spawn {modelname}.")
                                 {
-                                    if (!BrandVehicles.ContainsKey(element))
-                                        BrandVehicles.Add(element, (uint)GetHashKey(element));
-                                    else
-                                        Debug.WriteLine($"[vMenu] [Error] Your addons.json file contains 2 or more entries with the same brand name! ({element}) Please remove duplicate lines!");
+                                    Label = $"({model})",
+                                    ItemData = model // store the model name in the button data.
+                                };
+
+                                if (IsModelInCdimage(modelHash))
+                                {
+                                    brandMenu.AddMenuItem(modelBtn);
+                                }
+                                else
+                                {
+                                    modelBtn.Enabled = false;
+                                    modelBtn.Description = "This vehicle is not available. Please ask the server owner to check if the vehicle is being streamed correctly.";
+                                    modelBtn.LeftIcon = MenuItem.Icon.LOCK;
+                                    unavailableCars.AddMenuItem(modelBtn);
                                 }
                             }
 
-                            var brandlist = BrandVehicles.OrderBy(pair => GetLabelText(GetDisplayNameFromVehicleModel(pair.Value))).ToDictionary(pair => pair.Key, pair => pair.Value);
-
-                            foreach (KeyValuePair<string, uint> model in brandlist)
-                            {
-                                string localizedNameBrandCar = GetLabelText(GetDisplayNameFromVehicleModel(model.Value));
-
-                                string modelname = localizedNameBrandCar != "NULL" ? localizedNameBrandCar : GetDisplayNameFromVehicleModel(model.Value);
-                                modelname = modelname != "CARNOTFOUND" ? modelname : model.Key;
-
-                                // Menu modelMenu = new Menu(model.Key, "Select a model");
-                                MenuItem modelBtn = new MenuItem(modelname, $"Spawn the {brands.Key} {modelname}.")
-                                {
-                                    Label = $"({model.Key})",
-                                    ItemData = model.Key // store the model name in the button data.
-                                };
-
-                                brandMenu.AddMenuItem(modelBtn);
-                                // MenuController.AddSubmenu(brandMenu, modelMenu);
-                                // MenuController.BindMenuItem(brandMenu, modelMenu, modelBtn);
-
-                            }
                             if (brandMenu.Size > 0)
                             {
                                 MenuController.AddSubmenu(ManuMenu, brandMenu);
@@ -132,14 +169,49 @@ namespace vMenuClient
                             }
                         }
 
-                        var modellist = AddonVehicles.OrderBy(pair => GetLabelText(GetDisplayNameFromVehicleModel(pair.Value))).ToDictionary(pair => pair.Key, pair => pair.Value);
+                        // Sort by Class vehicles
+
+                        var modellist = AddonVehicles
+                            .OrderBy(pair => {
+                                string title = GetLabelText(GetDisplayNameFromVehicleModel(pair.Value));
+                                if (title.Length > 4)
+                                {
+                                    // Check if the first 4 characters are numeric (year)
+                                    bool isFirstFourCharactersNumeric = true;
+                                    for (int i = 0; i < 4; i++)
+                                    {
+                                        if (!char.IsDigit(title[i]))
+                                        {
+                                            isFirstFourCharactersNumeric = false;
+                                            break;
+                                        }
+                                    }
+
+                                    if (isFirstFourCharactersNumeric)
+                                    {
+                                        // Extracting the brand and title parts after ignoring the year
+                                        int yearIndex = title.IndexOf(' ');
+                                        if (yearIndex > 0 && yearIndex + 1 < title.Length)
+                                        {
+                                            string brandAndTitle = title.Substring(yearIndex + 1);
+                                            return brandAndTitle;
+                                        }
+                                    }
+                                }
+
+                                // If the first 4 characters are not numeric or the title is invalid or doesn't have at least 5 characters,
+                                // return the original title
+                                return title;
+                            })
+                            .ToDictionary(pair => pair.Key, pair => pair.Value);
+
 
                         for (var cat = 0; cat < 23; cat++)
                         {
                             Menu categoryMenu = new Menu("Addon Spawner", GetLabelText($"VEH_CLASS_{cat}"));
                             MenuItem categoryBtn = new MenuItem(GetLabelText($"VEH_CLASS_{cat}"), $"Spawn an addon vehicle from the {GetLabelText($"VEH_CLASS_{cat}")} class.") { Label = "→→→" };
 
-                            addonCarsMenu.AddMenuItem(categoryBtn);
+                            CaterMenu.AddMenuItem(categoryBtn);
 
                             if (!allowedCategories[cat])
                             {
@@ -180,8 +252,8 @@ namespace vMenuClient
                             //if (AddonVehicles.Count(av => GetVehicleClassFromName(av.Value) == cat && IsModelInCdimage(av.Value)) > 0)
                             if (categoryMenu.Size > 0)
                             {
-                                MenuController.AddSubmenu(addonCarsMenu, categoryMenu);
-                                MenuController.BindMenuItem(addonCarsMenu, categoryMenu, categoryBtn);
+                                MenuController.AddSubmenu(CaterMenu, categoryMenu);
+                                MenuController.BindMenuItem(CaterMenu, categoryMenu, categoryBtn);
 
                                 categoryMenu.OnItemSelect += (sender, item, index) =>
                                 {
@@ -200,7 +272,8 @@ namespace vMenuClient
                         if (unavailableCars.Size > 0)
                         {
                             addonCarsMenu.AddMenuItem(unavailableCarsBtn);
-                            MenuController.BindMenuItem(addonCarsMenu, unavailableCars, unavailableCarsBtn);
+                            MenuController.AddSubmenu(addonCarsMenu, unavailableCars);
+                            MenuController.BindMenuItem(CaterMenu, unavailableCars, unavailableCarsBtn);
                         }
                     }
                     else
@@ -523,6 +596,29 @@ namespace vMenuClient
                 }
             };
             #endregion
+        }
+
+        // Define the RemoveNumbersFromStart method
+        public static string RemoveNumbersFromStart(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            // Check if the first character is a digit (numeric)
+            if (char.IsDigit(input[0]))
+            {
+                // Find the index of the first non-numeric character
+                int nonNumericIndex = input.TakeWhile(char.IsDigit).Count();
+                if (nonNumericIndex < input.Length)
+                {
+                    // Return the substring after removing the numeric characters from the start
+                    return input.Substring(nonNumericIndex).TrimStart();
+                }
+            }
+
+            return input;
         }
 
         /// <summary>

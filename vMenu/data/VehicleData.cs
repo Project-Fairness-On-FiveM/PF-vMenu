@@ -168,7 +168,7 @@ namespace vMenuClient
             new VehicleColor(117, "BR_STEEL"),
             new VehicleColor(118, "BR BLACK_STEEL"),
             new VehicleColor(119, "BR_ALUMINIUM"),
-
+            new VehicleColor(120, "CHROME"),
             new VehicleColor(158, "GOLD_P"),
             new VehicleColor(159, "GOLD_S"),
         };

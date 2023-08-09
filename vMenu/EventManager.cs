@@ -110,7 +110,6 @@ namespace vMenuClient
         private void SetAddons()
         {
             // reset addons
-            VehicleSpawner.Brand = new Dictionary<string, uint>();
             VehicleSpawner.AddonVehicles = new Dictionary<string, uint>();
             WeaponOptions.AddonWeapons = new Dictionary<string, uint>();
             PlayerAppearance.AddonPeds = new Dictionary<string, uint>();
@@ -118,37 +117,6 @@ namespace vMenuClient
             string jsonData = LoadResourceFile(GetCurrentResourceName(), "config/addons.json") ?? "{}";
             try
             {
-                // load new addons.
-                var brands = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(jsonData);
-
-                // load vehicles - Brands
-                if (brands.ContainsKey("brands"))
-                {
-                    foreach (string element in brands["brands"])
-                    {
-                        if (!VehicleSpawner.Brand.ContainsKey(element))
-                        {
-                            VehicleSpawner.Brand.Add(element, (uint)GetHashKey(element));
-
-                            var veh_addons = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(jsonData);
-
-                            if (veh_addons.ContainsKey(element))
-                                foreach (string addon in veh_addons[element])
-                                {
-                                    string addonname = element + addon;
-                                    if (!VehicleSpawner.AddonVehicles.ContainsKey(addon))
-                                        VehicleSpawner.AddonVehicles.Add(addon, (uint)GetHashKey(addonname));
-                                    else
-                                        Debug.WriteLine($"[vMenu] [Error] Your addons.json file contains 2 or more entries with the same vehicle name! ({addon}) Please remove duplicate lines!");
-                                }
-                        }
-                        else
-                        {
-                            Debug.WriteLine($"[vMenu] [Error] Your addons.json file contains 2 or more entries with the same brand name! ({element}) Please remove duplicate lines!");
-                        }
-                    }
-                }
-
                 var addons = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(jsonData);
 
                 // load vehicles - Regular
@@ -162,16 +130,19 @@ namespace vMenuClient
                             Debug.WriteLine($"[vMenu] [Error] Your addons.json file contains 2 or more entries with the same vehicle name! ({addon}) Please remove duplicate lines!");
                     }
                 }
-
                 // load weapons
                 if (addons.ContainsKey("weapons"))
                 {
                     foreach (string addon in addons["weapons"])
                     {
                         if (!WeaponOptions.AddonWeapons.ContainsKey(addon))
+                        {
                             WeaponOptions.AddonWeapons.Add(addon, (uint)GetHashKey(addon));
+                        }
                         else
+                        {
                             Debug.WriteLine($"[vMenu] [Error] Your addons.json file contains 2 or more entries with the same weapon name! ({addon}) Please remove duplicate lines!");
+                        }
                     }
                 }
 
