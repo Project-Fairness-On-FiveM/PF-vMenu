@@ -1,6 +1,3 @@
-# URGENT NOTICE
-PF-vMenu will not be in development until August 14th. Due to some drama surrounding myself, and an idiot manipulating a staff member, development will be halted until further notice. For those who want to contact me, please do so by going [here](https://discord.gg/D7cVc8TzPN).
-
 # PF-vMenu
 The vMenu for Project Fairness and other affiliated servers. All actions are subject to change.
 
