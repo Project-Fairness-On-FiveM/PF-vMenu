@@ -53,6 +53,7 @@ namespace vMenuClient
         public bool VehiclePowerMultiplier { get; private set; } = false;
         public float VehicleTorqueMultiplierAmount { get; private set; } = 2f;
         public float VehiclePowerMultiplierAmount { get; private set; } = 2f;
+        public bool isCorrectVehicleType { get; private set; }
 
         private static readonly LanguageManager Lm = new LanguageManager();
 
@@ -2029,14 +2030,26 @@ namespace vMenuClient
                     // Wheel types
                     else if (item2 == vehicleWheelType)
                     {
+                        if (IsAllowed(Permission.VOAllowOpenWheel))
+                        {                    
+                        int vehicleClass = GetVehicleClass(veh.Handle);
+                        bool isBikeOrOpenWheel = (newIndex == 6 && veh.Model.IsBike);
+                        bool isNotBikeNorOpenWheel = (newIndex != 6 && !veh.Model.IsBike);
+                        bool isCorrectVehicleType = (isBikeOrOpenWheel || isNotBikeNorOpenWheel);
+                        }
+                        else
+                        {
                         int vehicleClass = GetVehicleClass(veh.Handle);
                         bool isBikeOrOpenWheel = (newIndex == 6 && veh.Model.IsBike) || (newIndex == 10 && vehicleClass == 22);
                         bool isNotBikeNorOpenWheel = (newIndex != 6 && !veh.Model.IsBike) && (newIndex != 10 && vehicleClass != 22);
-                        bool isCorrectVehicleType = (isBikeOrOpenWheel || isNotBikeNorOpenWheel);
+                        bool isCorrectVehicleType = (isBikeOrOpenWheel || isNotBikeNorOpenWheel);  
+                        }
+
+
                         if (!isCorrectVehicleType)
                         {
                             // Go past the index if it's not a bike.
-                            if (!veh.Model.IsBike && vehicleClass != 22)
+                            if (!veh.Model.IsBike)
                             {
                                 if (newIndex > oldIndex)
                                 {

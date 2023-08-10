@@ -45,6 +45,7 @@ namespace vMenuClient
         public static WeaponOptions WeaponOptionsMenu { get; private set; }
         public static WeaponLoadouts WeaponLoadoutsMenu { get; private set; }
         public static Recording RecordingMenu { get; private set; }
+        public static PluginSettings PluginSettingsMenu { get; private set; }
         public static MiscSettings MiscSettingsMenu { get; private set; }
         public static VoiceChat VoiceChatSettingsMenu { get; private set; }
         public static About AboutMenu { get; private set; }
@@ -830,6 +831,18 @@ namespace vMenuClient
             // Add a Spacer Here
             MenuItem spacer = GetSpacerMenuItem("~y~↓ Miscellaneous ↓");
             Menu.AddMenuItem(spacer);
+
+            // Add Plugin Settings Menu
+            if (IsAllowed(Permission.PNMenu))
+            {
+                PluginSettingsMenu = new PluginSettings();
+                Menu menu = PluginSettingsMenu.GetMenu();
+                MenuItem button = new MenuItem("Plugins Menu", "Miscellaneous vMenu options/settings can be configured here. You can also save your settings in this menu.")
+                {
+                    Label = "→→→"
+                };
+                AddMenu(Menu, menu, button);
+            }
 
             // Add misc settings menu.
             {

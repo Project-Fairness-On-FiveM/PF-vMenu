@@ -1342,7 +1342,10 @@ namespace vMenuClient
             if (!vehicle.Model.IsTrain) // to be extra fucking safe
             {
                 // workaround of retarded feature above:
+                if (spawnInside || IsAllowed(Permission.BPCarlaunch))
+                {
                 SetVehicleForwardSpeed(vehicle.Handle, speed);
+                }
             }
             vehicle.CurrentRPM = rpm;
 

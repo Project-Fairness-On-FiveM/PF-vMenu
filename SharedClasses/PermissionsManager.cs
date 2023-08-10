@@ -104,6 +104,7 @@ namespace vMenuShared
             VOFlares,
             VOPlaneBombs,
             VOVehiclesBlacklist,
+            VOAllowOpenWheel,
             #endregion
 
             // Vehicle Spawner
@@ -371,8 +372,19 @@ namespace vMenuShared
             VCShowSpeaker,
             VCStaffChannel,
             #endregion
-        };
 
+            // Plugin Menu
+            #region plugin menu
+            PNMenu,
+            PNAll,
+            PNEasyDrift,
+            #endregion
+
+            // Bug Prevention
+            #region bug prevention
+            BPCarlaunch,
+            #endregion
+        }
         public static Dictionary<Permission, bool> Permissions { get; private set; } = new Dictionary<Permission, bool>();
         public static bool ArePermissionsSetup { get; set; } = false;
 
@@ -630,6 +642,12 @@ namespace vMenuShared
                     break;
                 case "TP":
                     prefix += "TeleportOptions";
+                    break;
+                case "PN":
+                    prefix += "PluginMenu";
+                    break;
+                case "BP":
+                    prefix += "BugPrevention";
                     break;
                 default:
                     return prefix + name;

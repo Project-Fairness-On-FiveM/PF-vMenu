@@ -30,8 +30,10 @@ files {
     'Newtonsoft.Json.dll',
     'MenuAPI.dll',
     'config/*.json',
+    'config/languages/*.json',
     'storage.html'
 }
+client_script {'plugin-config.lua', 'plugins/***/*.lua', 'plugins/*.lua'}
 
 client_script 'vMenuClient.net.dll'
 server_script 'vMenuServer.net.dll'

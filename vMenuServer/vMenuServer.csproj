@@ -48,6 +48,9 @@
     <None Update="storage.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="plugins/*.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="fxmanifest.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
