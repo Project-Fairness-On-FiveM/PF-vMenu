@@ -45,6 +45,7 @@ namespace vMenuClient
         public static WeaponOptions WeaponOptionsMenu { get; private set; }
         public static WeaponLoadouts WeaponLoadoutsMenu { get; private set; }
         public static Recording RecordingMenu { get; private set; }
+        public static EnhancedCamera EnhancedCameraMenu { get; private set; }
         public static PluginSettings PluginSettingsMenu { get; private set; }
         public static MiscSettings MiscSettingsMenu { get; private set; }
         public static VoiceChat VoiceChatSettingsMenu { get; private set; }
@@ -831,6 +832,17 @@ namespace vMenuClient
             // Add a Spacer Here
             MenuItem spacer = GetSpacerMenuItem("~y~↓ Miscellaneous ↓");
             Menu.AddMenuItem(spacer);
+
+            // Add enhanced camera menu.
+            {
+                EnhancedCameraMenu = new EnhancedCamera();
+                Menu menu = EnhancedCameraMenu.GetMenu();
+                MenuItem button = new MenuItem("Enhanced Camera", "Opens the enhanced camera menu.")
+                {
+                    Label = "→→→"
+                };
+                AddMenu(Menu, menu, button);
+            }
 
             // Add Plugin Settings Menu
             if (IsAllowed(Permission.PNMenu))
