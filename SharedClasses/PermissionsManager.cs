@@ -344,6 +344,9 @@ namespace vMenuShared
             #region enhanced camera
             ECMenu,
             ECAll,
+            ECLeadCamera,
+            ECChaseCamera,
+            ECDroneCamera,
             #endregion
 
             // Misc Settings
@@ -654,6 +657,9 @@ namespace vMenuShared
                     break;
                 case "BP":
                     prefix += "BugPrevention";
+                    break;
+                case "EC":
+                    prefix += "EnhancedCamera";
                     break;
                 default:
                     return prefix + name;

@@ -834,6 +834,7 @@ namespace vMenuClient
             Menu.AddMenuItem(spacer);
 
             // Add enhanced camera menu.
+            if (IsAllowed(Permission.ECMenu))
             {
                 EnhancedCameraMenu = new EnhancedCamera();
                 Menu menu = EnhancedCameraMenu.GetMenu();

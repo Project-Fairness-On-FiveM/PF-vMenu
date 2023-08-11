@@ -59,8 +59,11 @@ namespace vMenuClient
 
             #region adding menu items
             // Checkboxes
+            if (IsAllowed(Permission.ECLeadCamera))
             menu.AddMenuItem(leadCam);
+            if (IsAllowed(Permission.ECChaseCamera))
             menu.AddMenuItem(chaseCam);
+            if (IsAllowed(Permission.ECDroneCamera))
             menu.AddMenuItem(droneCam);
 
             // Custom cam parameters menu
@@ -73,7 +76,10 @@ namespace vMenuClient
             MenuController.AddSubmenu(menu, customCamMenu);
             MenuController.BindMenuItem(menu, customCamMenu, buttonCustom);
 
+            if (IsAllowed(Permission.ECChaseCamera) || (IsAllowed(Permission.ECLeadCamera)))
+            menu.AddMenuItem(buttonCustom);
             // Drone cam parameters menu
+
             DroneCamMenu = new DroneCam();
             Menu droneCamMenu = DroneCamMenu.GetMenu();
             MenuItem buttonDrone = new MenuItem("Drone cam parameters", "Tune parameters for drone camera")
@@ -81,10 +87,11 @@ namespace vMenuClient
                 Label = "→→→"
             };
 
-            if (droneCameraConfigEnabled)
                 MenuController.AddSubmenu(menu, droneCamMenu);
                 MenuController.BindMenuItem(menu, droneCamMenu, buttonDrone);
 
+                if (IsAllowed(Permission.ECDroneCamera))
+                menu.AddMenuItem(buttonDrone);
             // Credits
             MenuItem credits = new MenuItem("Credits", "~g~Shrimp~s~ - idea and execution\n" +
                                                         "~g~Tom Grobbe~s~ - MenuAPI used for GUI, code snippets for saving/loading\n" +

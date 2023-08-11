@@ -96,12 +96,16 @@ namespace vMenuClient
                             }
 
                             // Add the vehicle model to the list corresponding to its make name.
-                            if (!vehiclesByMakeName.ContainsKey(makeName))
+                            if (!(makeName == "CARNOTFOUND"))
                             {
-                                vehiclesByMakeName[makeName] = new List<string>();
-                            }
+                                if (!vehiclesByMakeName.ContainsKey(makeName))
+                                {
+                                    vehiclesByMakeName[makeName] = new List<string>();
+    
+                                }
 
-                            vehiclesByMakeName[makeName].Add(model);
+                                vehiclesByMakeName[makeName].Add(model);
+                            }
                         }
 
                         // Sort vehicle brands alphabetically
@@ -118,6 +122,7 @@ namespace vMenuClient
 
                         foreach (string makeName in sortedVehicleBrands)
                         {
+                           
                             List<string> models = vehiclesByMakeName[makeName];
 
                             string brandNameText = GetLabelText(makeName);
